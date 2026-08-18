@@ -1,0 +1,116 @@
+{
+  "info": {
+    "name": "Compliance Coverage Agent API v1",
+    "description": "Manual legal-source maintenance, speech transcription, and compliance retrieval APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5001" },
+    { "key": "speechAudioFile", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Liveness",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/health" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('returns 200', () => pm.response.to.have.status(200));",
+              "pm.test('uses success envelope', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('returns request ID', () => pm.expect(pm.response.json().meta.requestId).to.be.a('string'));"
+            ] }
+          }]
+        },
+        {
+          "name": "Readiness",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/health/ready" }
+        }
+      ]
+    },
+    {
+      "name": "Legal Sources",
+      "item": [
+        {
+          "name": "Scrape GDPR",
+          "request": { "method": "POST", "url": "{{baseUrl}}/api/v1/legal-sources/gdpr/scrapes" }
+        },
+        {
+          "name": "Ingest GDPR",
+          "request": { "method": "POST", "url": "{{baseUrl}}/api/v1/legal-sources/gdpr/ingestions" }
+        },
+        {
+          "name": "Scrape EU AI Act",
+          "request": { "method": "POST", "url": "{{baseUrl}}/api/v1/legal-sources/eu-ai-act/scrapes" }
+        },
+        {
+          "name": "Ingest EU AI Act",
+          "request": { "method": "POST", "url": "{{baseUrl}}/api/v1/legal-sources/eu-ai-act/ingestions" }
+        }
+      ]
+    },
+    {
+      "name": "Speech",
+      "item": [
+        {
+          "name": "Transcribe Recording",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "audio/webm" }],
+            "body": { "mode": "file", "file": { "src": "{{speechAudioFile}}" } },
+            "url": "{{baseUrl}}/api/v1/speech/transcriptions"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('returns a normalized envelope', () => pm.expect(pm.response.json()).to.have.property('success'));",
+              "if (pm.response.code === 200) {",
+              "  const body = pm.response.json();",
+              "  pm.test('returns a Sarvam transcript', () => pm.expect(body.data).to.include({ provider: 'sarvam' }));",
+              "  pm.test('returns non-empty text', () => pm.expect(body.data.transcript).to.be.a('string').and.not.empty);",
+              "}"
+            ] }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Activity",
+      "item": [
+        {
+          "name": "Last 7 Days Activity",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/activity?days=7&page=1&limit=20" }
+        }
+      ]
+    },
+    {
+      "name": "Compliance",
+      "item": [
+        {
+          "name": "Retrieve GDPR Coverage",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requirement\": \"Users can request deletion of their personal data.\",\n  \"standards\": [\"GDPR\"],\n  \"topK\": 10,\n  \"similarityThreshold\": 0.65\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/compliance/retrieve"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('returns a normalized envelope', () => pm.expect(pm.response.json()).to.have.property('success'));",
+              "if (pm.response.code === 200) {",
+              "  const body = pm.response.json();",
+              "  pm.test('returns retrieval provenance', () => pm.expect(body.data.retrieval).to.have.property('resultSource'));",
+              "}"
+            ] }
+          }]
+        }
+      ]
+    }
+  ]
+}
