@@ -1,0 +1,308 @@
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  border-bottom: 1px solid var(--border-default);
+  background: color-mix(in srgb, var(--bg-surface) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.app-header__inner {
+  display: flex;
+  width: min(100%, var(--page-max-width));
+  min-height: 64px;
+  align-items: center;
+  gap: var(--space-5);
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+}
+
+.brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.brand-mark {
+  color: var(--primary);
+}
+
+.brand__name {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.workspace-control {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--border-default);
+}
+
+.workspace-control select {
+  max-width: 230px;
+  padding: 8px 32px 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.workspace-control select:hover {
+  border-color: var(--border-default);
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-help {
+  min-height: 38px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.header-help:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.header-activity {
+  position: relative;
+  display: inline-flex;
+  width: 38px;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-activity::after {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 9px);
+  right: 0;
+  width: max-content;
+  max-width: 240px;
+  padding: 7px 9px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--text-primary);
+  color: var(--bg-surface);
+  content: attr(data-tooltip);
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-3px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.header-activity:hover::after,
+.header-activity:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header-activity:hover,
+.header-activity--active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.theme-toggle__icon {
+  display: grid;
+  width: 18px;
+  place-items: center;
+  color: var(--primary);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.page-container {
+  width: min(100%, var(--page-max-width));
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-8) 64px;
+}
+
+.phase-placeholder {
+  min-height: calc(100vh - 168px);
+  padding: var(--space-8);
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.phase-placeholder__eyebrow {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.phase-placeholder p {
+  margin: var(--space-2) 0 0;
+  font-size: 14px;
+}
+
+.fatal-error {
+  display: grid;
+  width: min(calc(100% - 32px), 560px);
+  min-height: 100vh;
+  align-content: center;
+  justify-items: start;
+  margin: 0 auto;
+  padding: var(--space-8) 0;
+}
+
+.fatal-error__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--error-bg);
+  color: var(--error);
+  font-size: 22px;
+  font-weight: 600;
+  place-items: center;
+}
+
+.fatal-error h1 {
+  margin: var(--space-5) 0 0;
+  font-size: 24px;
+}
+
+.fatal-error p {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.fatal-error button {
+  min-height: 42px;
+  margin-top: var(--space-5);
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .app-header__inner {
+    min-height: 58px;
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+  }
+
+  .brand__name {
+    display: none;
+  }
+
+  .workspace-control {
+    min-width: 0;
+    padding-left: var(--space-3);
+  }
+
+  .workspace-control select {
+    max-width: 170px;
+  }
+
+  .page-container {
+    padding: var(--space-6) var(--space-4) var(--space-10);
+  }
+
+  .phase-placeholder {
+    padding: var(--space-5);
+  }
+}
+
+@media (max-width: 500px) {
+  .workspace-control select {
+    max-width: 118px;
+    padding-right: 20px;
+    font-size: 12px;
+  }
+
+  .theme-toggle > span:last-child {
+    display: none;
+  }
+
+  .theme-toggle {
+    width: 38px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .header-help {
+    padding: 0 7px;
+    font-size: 12px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
